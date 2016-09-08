@@ -11,4 +11,4 @@ install:
 script:
   - open -b com.apple.iphonesimulator
   - set -o pipefail
-  - xcodebuild build test -scheme ZMCSystem-ios -destination 'platform=iOS Simulator,name=iPhone 6s,OS=9.3' | xcpretty -s
+  - xcodebuild build test -scheme ZMCSystem-ios -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.0' | xcpretty -s
