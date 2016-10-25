@@ -125,12 +125,20 @@ extension ZMSLog {
     
     /// Adds a log hook
     static public func addHook(logHook: @escaping LogHook) -> LogHookToken {
-        let token = LogHookToken()
+        var token : LogHookToken! = nil
         logQueue.sync {
-            self.logHooks[token.token] = logHook
+            token = self.nonLockingAddHook(logHook: logHook)
         }
         return token
     }
+    
+    /// Adds a log hook without locking
+    static public func nonLockingAddHook(logHook: @escaping LogHook) -> LogHookToken {
+        let token = LogHookToken()
+        self.logHooks[token.token] = logHook
+        return token
+    }
+    
     
     /// Remove a log hook
     static public func removeLogHook(token: LogHookToken) {

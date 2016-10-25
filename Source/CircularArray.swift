@@ -1,0 +1,69 @@
+//
+// Wire
+// Copyright (C) 2016 Wire Swiss GmbH
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see http://www.gnu.org/licenses/.
+//
+
+import Foundation
+
+/// Cache of recorded logs
+public struct CircularArray<T> {
+    
+    /// Max size
+    private let size : Int
+    
+    /// A circular array used to store all lines
+    /// Once it reaches the end (full), it starts to overwrite from the beginning
+    private var circularArray : [T]
+    
+    /// Where to insert the next element
+    private var listEnd = 0
+    
+    private var isFull : Bool {
+        return self.circularArray.count == size
+    }
+    
+    /// Insert a log in the cache
+    public mutating func add(_ element: T) {
+        if !self.isFull {
+            circularArray.append(element)
+        } else {
+            circularArray[listEnd] = element
+        }
+
+        listEnd = (listEnd + 1) % size
+    }
+    
+    /// Returns the cache content
+    public var content : [T] {
+        if self.isFull {
+            return Array(circularArray[listEnd..<size]) + Array(circularArray[0..<listEnd])
+        }
+        return Array(circularArray[0..<listEnd])
+    }
+    
+    /// Remove content from cache
+    public mutating func clear() {
+        self.listEnd = 0
+        self.circularArray = []
+        self.circularArray.reserveCapacity(size)
+    }
+    
+    public init(size: Int) {
+        self.size = size
+        self.circularArray = []
+        self.circularArray.reserveCapacity(size)
+    }
+}

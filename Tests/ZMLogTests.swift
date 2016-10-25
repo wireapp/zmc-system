@@ -29,6 +29,7 @@ class ZMLogTests: XCTestCase {
     
     override func tearDown() {
         ZMSLog.debug_resetAllLevels();
+        ZMSLog.stopRecording()
         ZMSLog.removeAllLogHooks()
         super.tearDown()
     }
@@ -226,19 +227,17 @@ extension ZMLogTests {
         let level = ZMLogLevel_t.info
         let message = "PANIC!"
         
-        let expectation = self.expectation(description: "Log received")
         let token = ZMSLog.addHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
             XCTAssertEqual(message, _message)
-            expectation.fulfill()
         }
         
         // WHEN
         ZMSLog(tag: tag).info(message)
         
         // THEN
-        self.waitForExpectations(timeout: 0.2)
+        Thread.sleep(forTimeInterval: 0.2)
         
         // AFTER
         ZMSLog.removeLogHook(token: token)
@@ -285,6 +284,8 @@ extension ZMLogTests {
         
         // WHEN
         ZMSLog(tag: tag).debug(message)
+        
+        // THEN
         Thread.sleep(forTimeInterval: 0.2)
         
         // AFTER
@@ -382,5 +383,55 @@ extension ZMLogTests {
         // AFTER
         ZMSLog.removeLogHook(token: token1)
         ZMSLog.removeLogHook(token: token2)
+    }
+}
+
+extension ZMLogTests {
+    
+    func testThatRecordedLogsAreEmptyWhenNotStarted() {
+        
+        // GIVEN
+        let sut = ZMSLog(tag: "foo")
+        
+        // WHEN
+        sut.error("PANIC")
+        
+        // THEN
+        XCTAssertEqual(ZMSLog.recordedContent, [])
+        
+    }
+    
+    func testThatItRecordsLogs() {
+        
+        // GIVEN
+        let sut = ZMSLog(tag: "foo")
+        ZMSLog.startRecording()
+        
+        // WHEN
+        sut.error("PANIC")
+        sut.error("HELP")
+        
+        // THEN
+        guard let logLine = ZMSLog.recordedContent.first else {
+            XCTFail()
+            return
+        }
+        XCTAssertTrue(logLine.hasSuffix("[0] [foo] PANIC"))
+        XCTAssertEqual(ZMSLog.recordedContent.count, 2)
+    }
+    
+    func testThatItDiscardsLogsWhenStopped() {
+        
+        // GIVEN
+        let sut = ZMSLog(tag: "foo")
+        ZMSLog.startRecording()
+        
+        // WHEN
+        sut.error("PANIC")
+        sut.error("HELP")
+        ZMSLog.stopRecording()
+        
+        // THEN
+        XCTAssertTrue(ZMSLog.recordedContent.isEmpty)
     }
 }
