@@ -53,16 +53,16 @@ import Foundation
 extension ZMSLog {
     
     public func error(_ message: @autoclosure () -> String, file: String = #file, line: UInt = #line) {
-        ZMSLog.logWithLevel(.error, message, tag: self.tag, file: file, line:line)
+        ZMSLog.logWithLevel(.error, message: message, tag: self.tag, file: file, line:line)
     }
     public func warn(_ message: @autoclosure () -> String, file: String = #file, line: UInt = #line) {
-        ZMSLog.logWithLevel(.warn, message, tag: self.tag, file: file, line:line)
+        ZMSLog.logWithLevel(.warn, message: message, tag: self.tag, file: file, line:line)
     }
     public func info(_ message: @autoclosure () -> String, file: String = #file, line: UInt = #line) {
-        ZMSLog.logWithLevel(.info, message, tag: self.tag, file: file, line:line)
+        ZMSLog.logWithLevel(.info, message: message, tag: self.tag, file: file, line:line)
     }
     public func debug(_ message: @autoclosure () -> String, file: String = #file, line: UInt = #line) {
-        ZMSLog.logWithLevel(.debug, message, tag: self.tag, file: file, line:line)
+        ZMSLog.logWithLevel(.debug, message: message, tag: self.tag, file: file, line:line)
     }
 }
 
@@ -159,7 +159,7 @@ extension ZMSLog {
 extension ZMSLog {
     
     /// Log only if this log level is enabled for the tag, or no tag is set
-    static func logWithLevel(_ level: ZMLogLevel_t, _ message: @autoclosure () -> String, tag: String?, file: String = #file, line: UInt = #line) {
+    static func logWithLevel(_ level: ZMLogLevel_t, message: @autoclosure () -> String, tag: String?, file: String = #file, line: UInt = #line) {
         if tag == nil || level.rawValue <= ZMSLog.getLevel(tag: tag!).rawValue {
             let concreteMessage = message()
             logQueue.async {
