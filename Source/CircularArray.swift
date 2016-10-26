@@ -18,7 +18,9 @@
 
 import Foundation
 
-/// Cache of recorded logs
+/// A circular array behaves like an array, but once it reaches a maximum size
+/// new elements that are inserted will overwrite the oldest elements, allowing
+/// for inserting an infinite amount of elements (at the cost of discarding the old ones)
 public struct CircularArray<T> {
     
     /// Max size
@@ -26,6 +28,8 @@ public struct CircularArray<T> {
     
     /// A circular array used to store all lines
     /// Once it reaches the end (full), it starts to overwrite from the beginning
+    /// The same operation could be achieved by appending to the end and removing from
+    /// the frong, but this would have caused reallocating the array
     private var circularArray : [T]
     
     /// Where to insert the next element
@@ -35,7 +39,7 @@ public struct CircularArray<T> {
         return self.circularArray.count == size
     }
     
-    /// Insert a log in the cache
+    /// Insert an element in the array
     public mutating func add(_ element: T) {
         if !self.isFull {
             circularArray.append(element)
