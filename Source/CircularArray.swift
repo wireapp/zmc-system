@@ -29,7 +29,7 @@ public struct CircularArray<T> {
     /// A circular array used to store all lines
     /// Once it reaches the end (full), it starts to overwrite from the beginning
     /// The same operation could be achieved by appending to the end and removing from
-    /// the frong, but this would have caused reallocating the array
+    /// the front, but this would cause reallocating the array
     private var circularArray : [T]
     
     /// Where to insert the next element
