@@ -26,7 +26,6 @@ void ZMLog(NSString *tag, char const * const filename, int linenumber, ZMLogLeve
     va_start(args, format);
     NSString *output = [[NSString alloc] initWithFormat:format arguments:args];
     va_end(args);
-    
     [ZMSLog logWithLevel:logLevel message:^NSString * _Nonnull{
         return output;
     } tag:tag file:[NSString stringWithUTF8String:filename] line:(NSUInteger)linenumber];
