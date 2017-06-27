@@ -98,6 +98,19 @@
 #endif
 
 
+#if ENABLE_DEVELOPER_MENU
+#   define RequireInternal(assertion, frmt, ...) \
+    do { \
+        if ( __builtin_expect(!(assertion), 0) ) { \
+            ZMDebugAssertMessage(@"Assert", #assertion, __FILE__, __LINE__, nil); \
+            ZMCrash(#assertion, __FILE__, __LINE__); \
+        } \
+    } while (0)
+# else
+#   define RequireInternal(assertion, frmt, ...)
+#endif
+
+
 
 #define VerifyAction(assertion, action) \
 	do { \
@@ -171,7 +184,6 @@
 		} \
 	} while (0)
 #endif
-
 
 
 #pragma mark -

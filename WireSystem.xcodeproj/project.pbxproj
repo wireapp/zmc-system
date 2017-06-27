@@ -38,6 +38,8 @@
 		54FF9F121C48F67300B29ACE /* ZMSTimePoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 54FF9F101C48F67300B29ACE /* ZMSTimePoint.m */; };
 		54FF9F141C4906C700B29ACE /* ZMTimePointTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 54FF9F131C4906C700B29ACE /* ZMTimePointTests.m */; };
 		54FF9F161C4914D100B29ACE /* ZMSTestDetectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 54FF9F151C4914D100B29ACE /* ZMSTestDetectionTests.m */; };
+		BFD208581F02570000D48FEF /* DeveloperMenuState.h in Headers */ = {isa = PBXBuildFile; fileRef = BFD208561F02570000D48FEF /* DeveloperMenuState.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BFD208591F02570000D48FEF /* DeveloperMenuState.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD208571F02570000D48FEF /* DeveloperMenuState.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +102,8 @@
 		54FF9F101C48F67300B29ACE /* ZMSTimePoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMSTimePoint.m; sourceTree = "<group>"; };
 		54FF9F131C4906C700B29ACE /* ZMTimePointTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMTimePointTests.m; sourceTree = "<group>"; };
 		54FF9F151C4914D100B29ACE /* ZMSTestDetectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMSTestDetectionTests.m; sourceTree = "<group>"; };
+		BFD208561F02570000D48FEF /* DeveloperMenuState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeveloperMenuState.h; sourceTree = "<group>"; };
+		BFD208571F02570000D48FEF /* DeveloperMenuState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeveloperMenuState.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +179,8 @@
 				5486624E1B344BB800298EFD /* ZMSActivity.m */,
 				096A3A1C1B67CEF700565001 /* ZMSLogging.h */,
 				096A3A1D1B67CEF700565001 /* ZMSLogging.m */,
+				BFD208561F02570000D48FEF /* DeveloperMenuState.h */,
+				BFD208571F02570000D48FEF /* DeveloperMenuState.m */,
 				096A3A1E1B67CEF700565001 /* ZMSLog.swift */,
 				54DB81621DBF66CF00AF495D /* ZMSLog+Levels.swift */,
 				54D573691DBFBAFA00D6C2C4 /* ZMSLog+Recording.swift */,
@@ -239,6 +245,7 @@
 				54F249C81BB9242900040600 /* ZMSDispatchGroup.h in Headers */,
 				5486624C1B344BA900298EFD /* ZMSActivity.h in Headers */,
 				54F5148C1B7377CA00FACDAA /* ZMSGroupQueue.h in Headers */,
+				BFD208581F02570000D48FEF /* DeveloperMenuState.h in Headers */,
 				548662461B344AAB00298EFD /* ZMSAsserts.h in Headers */,
 				54FF9F111C48F67300B29ACE /* ZMSTimePoint.h in Headers */,
 			);
@@ -360,6 +367,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFD208591F02570000D48FEF /* DeveloperMenuState.m in Sources */,
 				544CFC511B70B933007AA694 /* ZMSLog.swift in Sources */,
 				54F249C91BB9242900040600 /* ZMSDispatchGroup.m in Sources */,
 				54C0CC411C9C7635000A9286 /* ZMSAsserts.m in Sources */,

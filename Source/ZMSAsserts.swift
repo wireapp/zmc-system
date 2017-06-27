@@ -19,6 +19,7 @@
 
 import Foundation
 
+
 /// Reports an error and terminates the application
 public func fatal(_ message: String, file: String = #file, line: Int = #line) -> Never  {
     ZMAssertionDump_NSString("Swift assertion", file, Int32(line), message)
@@ -30,4 +31,10 @@ public func require(_ condition: Bool, _ message: String = "", file: String = #f
     if(!condition) {
         fatal(message, file: file, line: line)
     }
+}
+
+/// Termiantes the application if the condition is `false` and the current build is not an AppsStore build
+public func requireInternal(_ condition: Bool, _ message: @autoclosure () -> String, file: String = #file, line: Int = #line) {
+    guard DeveloperMenuState.developerMenuEnabled(), !condition else { return }
+    fatal(message(), file: file, line: line)
 }
