@@ -34,16 +34,16 @@ public func require(_ condition: Bool, _ message: String = "", file: String = #f
 }
 
 @objc public enum Environment: UInt8 {
-    case appStore, `internal`, debug, develop, undefined
+    case appStore, `internal`, debug, develop, unknown
 
     static var current: Environment {
-        guard let identifier = Bundle.main.bundleIdentifier else { return .undefined }
+        guard let identifier = Bundle.main.bundleIdentifier else { return .unknown }
         switch identifier {
         case "com.wearezeta.zclient.ios": return .appStore
         case "com.wearezeta.zclient-alpha": return .debug
         case "com.wearezeta.zclient.ios-internal": return .internal
         case "com.wearezeta.zclient.ios-development": return .develop
-        default: return .undefined
+        default: return .unknown
         }
     }
 
