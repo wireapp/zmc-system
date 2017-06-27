@@ -106,7 +106,7 @@
             ZMCrash(#assertion, __FILE__, __LINE__); \
         } \
     } while (0)
-# else
+#else
 #   define RequireInternal(assertion, frmt, ...)
 #endif
 
