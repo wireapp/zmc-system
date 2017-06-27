@@ -33,8 +33,27 @@ public func require(_ condition: Bool, _ message: String = "", file: String = #f
     }
 }
 
+@objc public enum Environment: UInt8 {
+    case appStore, `internal`, debug, develop, undefined
+
+    static var current: Environment {
+        guard let identifier = Bundle.main.bundleIdentifier else { return .undefined }
+        switch identifier {
+        case "com.wearezeta.zclient.ios": return .appStore
+        case "com.wearezeta.zclient-alpha": return .debug
+        case "com.wearezeta.zclient.ios-internal": return .internal
+        case "com.wearezeta.zclient.ios-development": return .develop
+        default: return .undefined
+        }
+    }
+
+    var isAppStore: Bool {
+        return self == .appStore
+    }
+}
+
 /// Termiantes the application if the condition is `false` and the current build is not an AppsStore build
 public func requireInternal(_ condition: Bool, _ message: @autoclosure () -> String, file: String = #file, line: Int = #line) {
-    guard DeveloperMenuState.developerMenuEnabled(), !condition else { return }
+    guard !Environment.current.isAppStore, !condition else { return }
     fatal(message(), file: file, line: line)
 }
