@@ -98,18 +98,14 @@
 #endif
 
 
-#if ENABLE_DEVELOPER_MENU
-#   define RequireInternal(assertion, frmt, ...) \
+#define RequireInternal(assertion, frmt, ...) \
     do { \
-        if ( __builtin_expect(!(assertion), 0) ) { \
+        BOOL appStore = [NSBundle.mainBundle.bundleIdentifier isEqualToString:@"com.wearezeta.zclient.ios"]; \
+        if ( __builtin_expect(!appStore && !(assertion), 0) ) { \
             ZMDebugAssertMessage(@"Assert", #assertion, __FILE__, __LINE__, nil); \
             ZMCrash(#assertion, __FILE__, __LINE__); \
         } \
     } while (0)
-#else
-#   define RequireInternal(assertion, frmt, ...)
-#endif
-
 
 
 #define VerifyAction(assertion, action) \
