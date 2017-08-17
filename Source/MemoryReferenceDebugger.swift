@@ -29,14 +29,18 @@ import Foundation
     static private var shared = MemoryReferenceDebugger()
     
     public static func register(_ object: AnyObject?, line: UInt = #line, file: StaticString = #file) {
-        guard let object = object else { return }
-        shared.references.append(ReferenceAllocation(object: object, file: file.description, line: line))
+        guard var object = object else { return }
+        withUnsafePointer(to: &object) {
+            shared.references.append(ReferenceAllocation(object: object, pointerAddress: $0.debugDescription, file: file.description, line: line))
+        }
     }
     
     @objc public static func register(_ object: NSObject?, line: UInt, file: UnsafePointer<CChar>) {
-        guard let object = object else { return }
+        guard var object = object else { return }
         let fileString = String.init(cString: file)
-        shared.references.append(ReferenceAllocation(object: object, file: fileString, line: line))
+        withUnsafePointer(to: &object) {
+            shared.references.append(ReferenceAllocation(object: object, pointerAddress: $0.debugDescription, file: fileString, line: line))
+        }
     }
     
     @objc static public func reset() {
@@ -52,13 +56,14 @@ import Foundation
             .filter{ $0.object != nil }
             .map{
                 $0.description
-            }.joined(separator: ", ")
+            }.joined(separator: "/n")
     }
 }
 
 public struct ReferenceAllocation: CustomStringConvertible {
     
     public weak var object: AnyObject?
+    public let pointerAddress: String
     public let file: String
     public let line: UInt
     
@@ -68,7 +73,7 @@ public struct ReferenceAllocation: CustomStringConvertible {
     
     public var description: String {
         guard let object = object else { return "<->" }
-        return "\(type(of: object)), \(self.file):\(self.line)"
+        return "\(type(of: object))[\(pointerAddress)], \(self.file):\(self.line)"
     }
     
 }
