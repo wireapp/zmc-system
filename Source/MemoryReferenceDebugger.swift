@@ -56,7 +56,7 @@ import Foundation
             .filter{ $0.object != nil }
             .map{
                 $0.description
-            }.joined(separator: "/n")
+            }.joined(separator: "\n")
     }
 }
 
