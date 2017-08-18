@@ -100,7 +100,21 @@ class MemoryReferenceDebuggerTests: XCTestCase {
         // THEN
         XCTAssertTrue(MemoryReferenceDebugger.aliveObjects.isEmpty)
     }
-
+    
+    func testErrorDescription() {
+        // GIVEN
+        let sut = NSURL(fileURLWithPath: "Path")
+        let file: StaticString = "File"
+        let line: UInt = 10
+        
+        // WHEN
+        MemoryReferenceDebugger.register(sut, line: line, file: file)
+        
+        // THEN
+        let description = MemoryReferenceDebugger.aliveObjectsDescription
+        XCTAssertTrue(description.contains("\(file):\(line)"))
+        XCTAssertTrue(description.contains("\(type(of: sut))"))
+    }
 }
 
 
