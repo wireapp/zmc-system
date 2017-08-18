@@ -18,8 +18,50 @@
 
 import Foundation
 import XCTest
+@testable import WireSystem
+
+class ReferenceAllocationTests: XCTestCase {
+    func testThatExistingObjectIsMarkedAsValid() {
+        // GIVEN
+        let object = TestClass()
+        let sut = ReferenceAllocation(object: object, pointerAddress:"2", file:"some", line: 10)
+        
+        // THEN
+        XCTAssertTrue(sut.isValid)
+    }
+    
+    func testThatNilObjectIsMarkedAsNotValid() {
+        // GIVEN
+        let object: AnyObject? = nil
+        let sut = ReferenceAllocation(object: object, pointerAddress:"2", file:"some", line: 10)
+        
+        // THEN
+        XCTAssertFalse(sut.isValid)
+    }
+    
+    func testItTracksObjectLifetime() {
+        // GIVEN
+        var object: TestClass? = TestClass()
+        let sut = ReferenceAllocation(object: object, pointerAddress:"2", file:"some", line: 10)
+        XCTAssertTrue(sut.isValid)
+
+        // WHEN
+        object = nil
+        
+        // THEN
+        XCTAssertFalse(sut.isValid)
+    }
+}
 
 class MemoryReferenceDebuggerTests: XCTestCase {
+    
+    func testThatItDoesNotTrackNils() {
+        // WHEN
+        MemoryReferenceDebugger.register(nil)
+        
+        // THEN
+        XCTAssertTrue(MemoryReferenceDebugger.aliveObjects.isEmpty)
+    }
     
     func testThatItDetectsObjectsThatAreStillAlive() {
         
@@ -31,7 +73,6 @@ class MemoryReferenceDebuggerTests: XCTestCase {
         
         // THEN
         XCTAssertFalse(MemoryReferenceDebugger.aliveObjects.isEmpty)
-        
     }
     
     func testThatItFiltersOutObjectsThatAreNotAlive() {
@@ -45,7 +86,6 @@ class MemoryReferenceDebuggerTests: XCTestCase {
         
         // THEN
         XCTAssertTrue(MemoryReferenceDebugger.aliveObjects.isEmpty)
-        
     }
     
     func testThatItResetsListOfReferences() {
@@ -59,8 +99,8 @@ class MemoryReferenceDebuggerTests: XCTestCase {
         
         // THEN
         XCTAssertTrue(MemoryReferenceDebugger.aliveObjects.isEmpty)
-        
     }
+
 }
 
 
