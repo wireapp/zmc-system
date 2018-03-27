@@ -43,6 +43,7 @@
 		54FF9F141C4906C700B29ACE /* ZMTimePointTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 54FF9F131C4906C700B29ACE /* ZMTimePointTests.m */; };
 		54FF9F161C4914D100B29ACE /* ZMSTestDetectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 54FF9F151C4914D100B29ACE /* ZMSTestDetectionTests.m */; };
 		D59F3A1B206A448F0023474F /* DispatchQueue+ZMSDispatchGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F3A1A206A448F0023474F /* DispatchQueue+ZMSDispatchGroup.swift */; };
+		D59F3A1D206A47E80023474F /* DispatchQueueHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F3A1C206A47E80023474F /* DispatchQueueHelperTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +107,7 @@
 		54FF9F131C4906C700B29ACE /* ZMTimePointTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMTimePointTests.m; sourceTree = "<group>"; };
 		54FF9F151C4914D100B29ACE /* ZMSTestDetectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZMSTestDetectionTests.m; sourceTree = "<group>"; };
 		D59F3A1A206A448F0023474F /* DispatchQueue+ZMSDispatchGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+ZMSDispatchGroup.swift"; sourceTree = "<group>"; };
+		D59F3A1C206A47E80023474F /* DispatchQueueHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueHelperTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,6 +223,7 @@
 				54A327391B99A3840004EB95 /* ZMLoggingTests.m */,
 				5457426B1BA9C50C0009409B /* ZMDefinesTest.m */,
 				54A3273B1B99C04F0004EB95 /* ZMLogTests.swift */,
+				D59F3A1C206A47E80023474F /* DispatchQueueHelperTests.swift */,
 				54DB81661DBFB16700AF495D /* CircularArrayTests.swift */,
 				54DAE8FC1BA83B01009403F8 /* Test-Bridging.h */,
 				54C5DF891BBADA3D00DCFC95 /* ZMSDispatchGroupTests.m */,
@@ -393,6 +396,7 @@
 				54180BDE1F459DFF0020D2BD /* MemoryReferenceDebuggerTests.m in Sources */,
 				54A3273C1B99C04F0004EB95 /* ZMLogTests.swift in Sources */,
 				54FF9F161C4914D100B29ACE /* ZMSTestDetectionTests.m in Sources */,
+				D59F3A1D206A47E80023474F /* DispatchQueueHelperTests.swift in Sources */,
 				54C0CC431C9C7862000A9286 /* ZMSAssertionTests.m in Sources */,
 				54FF9F141C4906C700B29ACE /* ZMTimePointTests.m in Sources */,
 				54A3273A1B99A3840004EB95 /* ZMLoggingTests.m in Sources */,
