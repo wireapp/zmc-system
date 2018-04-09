@@ -435,3 +435,24 @@ extension ZMLogTests {
         XCTAssertTrue(ZMSLog.recordedContent.isEmpty)
     }
 }
+
+
+// MARK: - Save on disk
+extension ZMLogTests {
+    
+    func testThatItSavesLogsOnDisk() {
+        
+        //given
+        let sut = ZMSLog(tag: "foo")
+        ZMSLog.startRecording()
+        
+        //when
+        sut.warn("DON'T")
+        sut.error("PANIC")
+        ZMSLog.saveCurrentLogOnDisk()
+        
+        //then
+        XCTAssertTrue(ZMSLog.previousLog != nil)
+    }
+    
+}

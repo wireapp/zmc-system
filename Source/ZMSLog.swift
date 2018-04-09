@@ -183,6 +183,30 @@ extension ZMSLog {
     }
 }
 
+// MARK: - Save on disk & file management
+extension ZMSLog {
+    
+    static public var previousLog: Data? {
+        guard let previousLogPath = previousLogPath else { return nil }
+        return try? Data(contentsOf: previousLogPath)
+    }
+    
+    static var previousLogPath: URL? {
+        let manager = FileManager.default
+        guard let path = manager.urls(for: .cachesDirectory, in: .userDomainMask).first else { return nil }
+        return path.appendingPathComponent("previous.log")
+    }
+    
+    static public func saveCurrentLogOnDisk() {
+        let content = ZMSLog.recordedContent.joined(separator: "\n")
+        guard let previousLogPath = previousLogPath else { return }
+        
+        do {
+            try content.write(to: previousLogPath, atomically: true, encoding: .utf8)
+        } catch { }
+    }
+}
+
 // Shared ASL client used to log
 private let sharedASLClient : ZMSASLClient = ZMSASLClient(identifier: Bundle.main.bundleIdentifier ?? "com.wire.zmessaging.test", facility: nil)
 
