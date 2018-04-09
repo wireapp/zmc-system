@@ -56,6 +56,7 @@ FRAMEWORK_SEARCH_PATHS = $(CARTHAGE_FOLDER) $(PLATFORM_DIR)/Developer/Library/Fr
 //
 SWIFT_VERSION = 3.0
 ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
+SWIFT_COMPILATION_MODE = wholemodule
 LD_RUNPATH_SEARCH_PATHS = $(inherited) @loader_path/Frameworks @loader_path/../Frameworks @executable_path/Frameworks @executable_path/../Frameworks
 
 
