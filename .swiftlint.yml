@@ -1,0 +1,11 @@
+disabled_rules: # rule identifiers to exclude from running
+  - xctfail_message
+
+file_length:
+  warning: 450
+  error: 600
+
+excluded: # paths to ignore during linting. Takes precedence over `included`.
+  - Carthage
+  - Pods
+  - Ressources

@@ -22,23 +22,23 @@ import Foundation
 /// new elements that are inserted will overwrite the oldest elements, allowing
 /// for inserting an infinite amount of elements (at the cost of discarding the old ones)
 public struct CircularArray<T> {
-    
+
     /// Max size
-    private let size : Int
-    
+    private let size: Int
+
     /// A circular array used to store all lines
     /// Once it reaches the end (full), it starts to overwrite from the beginning
     /// The same operation could be achieved by appending to the end and removing from
     /// the front, but this would cause reallocating the array
-    private var circularArray : [T]
-    
+    private var circularArray: [T]
+
     /// Where to insert the next element
     private var listEnd = 0
-    
-    private var isFull : Bool {
+
+    private var isFull: Bool {
         return self.circularArray.count == size
     }
-    
+
     /// Insert an element in the array
     public mutating func add(_ element: T) {
         if !self.isFull {
@@ -49,22 +49,22 @@ public struct CircularArray<T> {
 
         listEnd = (listEnd + 1) % size
     }
-    
+
     /// Returns the cache content
-    public var content : [T] {
+    public var content: [T] {
         if self.isFull {
             return Array(circularArray[listEnd..<size]) + Array(circularArray[0..<listEnd])
         }
         return Array(circularArray[0..<listEnd])
     }
-    
+
     /// Remove content from cache
     public mutating func clear() {
         self.listEnd = 0
         self.circularArray = []
         self.circularArray.reserveCapacity(size)
     }
-    
+
     public init(size: Int) {
         self.size = size
         self.circularArray = []
