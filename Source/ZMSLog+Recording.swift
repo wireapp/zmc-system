@@ -18,7 +18,7 @@
 
 import Foundation
 
-private var logCache : CircularArray<String>? = nil
+//private var logCache : CircularArray<String>? = nil
 private var recordingToken : ZMSLog.LogHookToken? = nil
 
 extension ZMSLog {
@@ -27,22 +27,14 @@ extension ZMSLog {
     public static func startRecording(size: Int = 10000) {
         logQueue.sync {
             if recordingToken == nil {
-                logCache = CircularArray<String>(size: size)
+                //logCache = CircularArray<String>(size: size)
                 recordingToken = self.nonLockingAddHook(logHook: { (level, tag, message) -> (Void) in
                     let tagString = tag.flatMap { "[\($0)] "} ?? ""
-                    logCache?.add("\(Date()): [\(level.rawValue)] \(tagString)\(message)")
+                    ZMSLog.appendToCurrentLog("\(Date()): [\(level.rawValue)] \(tagString)\(message)\n")
+                    //logCache?.add("\(Date()): [\(level.rawValue)] \(tagString)\(message)")
                 })
             }
         }
-    }
-    
-    /// Returns a list of recorded log lines
-    public static var recordedContent : [String] {
-        var output : [String] = []
-        logQueue.sync {
-            output = logCache?.content ?? []
-        }
-        return output
     }
     
     /// Stop recording logs and discard cache
@@ -51,7 +43,8 @@ extension ZMSLog {
         logQueue.sync {
             guard let token = recordingToken else { return }
             tokenToRemove = token
-            logCache = nil
+            //logCache = nil
+            //ZMSLog.switchCurrentLogToPrevious()
             recordingToken = nil
         }
         if let token = tokenToRemove {

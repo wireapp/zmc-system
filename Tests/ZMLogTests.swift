@@ -25,6 +25,7 @@ class ZMLogTests: XCTestCase {
     override func setUp() {
         super.setUp()
         ZMSLog.debug_resetAllLevels();
+        ZMSLog.debug_clearLogs()
     }
     
     override func tearDown() {
@@ -388,16 +389,17 @@ extension ZMLogTests {
 
 extension ZMLogTests {
     
-    func testThatRecordedLogsAreEmptyWhenNotStarted() {
+    func testThatRecordedLogsAreNotWritedWhenNotStarted() {
         
         // GIVEN
         let sut = ZMSLog(tag: "foo")
+        let currentLog = ZMSLog.currentLog
         
         // WHEN
         sut.error("PANIC")
         
         // THEN
-        XCTAssertEqual(ZMSLog.recordedContent, [])
+        XCTAssertEqual(ZMSLog.currentLog, currentLog)
         
     }
     
@@ -412,12 +414,19 @@ extension ZMLogTests {
         sut.error("HELP")
         
         // THEN
-        guard let logLine = ZMSLog.recordedContent.first else {
+        guard let currentLog = ZMSLog.currentLog,
+            let logContent = String(data: currentLog, encoding: .utf8) else {
             XCTFail()
             return
         }
-        XCTAssertTrue(logLine.hasSuffix("[0] [foo] PANIC"))
-        XCTAssertEqual(ZMSLog.recordedContent.count, 2)
+        
+        var lines: [String] = []
+        logContent.enumerateLines { (str, _) in
+            lines.append(str)
+        }
+
+        XCTAssertEqual(lines.count, 2)
+        XCTAssertTrue(lines.first!.hasSuffix("[0] [foo] PANIC"))
     }
     
     func testThatItDiscardsLogsWhenStopped() {
@@ -432,7 +441,7 @@ extension ZMLogTests {
         ZMSLog.stopRecording()
         
         // THEN
-        XCTAssertTrue(ZMSLog.recordedContent.isEmpty)
+        XCTAssertNil(ZMSLog.currentLog)
     }
 }
 
@@ -449,10 +458,30 @@ extension ZMLogTests {
         //when
         sut.warn("DON'T")
         sut.error("PANIC")
-        ZMSLog.saveCurrentLogOnDisk()
+        //ZMSLog.saveCurrentLogOnDisk()
         
         //then
-        XCTAssertTrue(ZMSLog.previousLog != nil)
+        XCTAssertNotNil(ZMSLog.currentLog)
+    }
+    
+    func testThatSwitchesCurrentLogToPrevious() {
+        
+        //given
+        let sut = ZMSLog(tag: "foo")
+        let currentLog = ZMSLog.currentLog
+        //let previousLog = ZMSLog.previousLog
+        
+        ZMSLog.startRecording()
+        
+        //when
+        sut.warn("DON'T")
+        sut.error("PANIC")
+        
+        ZMSLog.switchCurrentLogToPrevious()
+        
+        XCTAssertNotNil(ZMSLog.previousLog)
+        XCTAssertEqual(ZMSLog.previousLog, currentLog)
+        XCTAssertNil(ZMSLog.currentLog)
     }
     
 }

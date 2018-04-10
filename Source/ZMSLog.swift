@@ -187,23 +187,88 @@ extension ZMSLog {
 extension ZMSLog {
     
     static public var previousLog: Data? {
-        guard let previousLogPath = previousLogPath else { return nil }
-        return try? Data(contentsOf: previousLogPath)
+        guard let previousLogPath = previousLogPath?.path else { return nil }
+        return readFile(at: previousLogPath)
+    }
+    
+    static public var currentLog: Data? {
+        guard let currentLogPath = currentLogPath?.path else { return nil }
+        return readFile(at: currentLogPath)
+    }
+    
+    static private func readFile(at path: String) -> Data? {
+        let handle = FileHandle(forReadingAtPath: path)
+        return handle?.readDataToEndOfFile()
     }
     
     static var previousLogPath: URL? {
-        let manager = FileManager.default
-        guard let path = manager.urls(for: .cachesDirectory, in: .userDomainMask).first else { return nil }
-        return path.appendingPathComponent("previous.log")
+        return cachesDirectory?.appendingPathComponent("previous.log")
     }
     
-    static public func saveCurrentLogOnDisk() {
-        let content = ZMSLog.recordedContent.joined(separator: "\n")
-        guard let previousLogPath = previousLogPath else { return }
+    static var currentLogPath: URL? {
+        return cachesDirectory?.appendingPathComponent("current.log")
+    }
+    
+    public static func debug_clearLogs() {
+        guard let previousLogPath = previousLogPath, let currentLogPath = currentLogPath else { return }
+        logQueue.async {
+            let manager = FileManager.default
+            do {
+                try manager.removeItem(at: previousLogPath)
+            } catch let error {
+                print("debug_clearLogs: " + error.localizedDescription)
+            }
+            
+            do {
+                try manager.removeItem(at: currentLogPath)
+            } catch let error {
+                print("debug_clearLogs: " + error.localizedDescription)
+            }
+        }
+    }
+    
+    public static func switchCurrentLogToPrevious() {
+        guard let previousLogPath = previousLogPath, let currentLogPath = currentLogPath else { return }
         
-        do {
-            try content.write(to: previousLogPath, atomically: true, encoding: .utf8)
-        } catch { }
+        logQueue.async {
+            let manager = FileManager.default
+            do {
+                try manager.removeItem(at: previousLogPath)
+            } catch let error {
+                print("switchCurrentLogToPrevious: " + error.localizedDescription)
+            }
+            
+            do {
+                try manager.moveItem(at: currentLogPath, to: previousLogPath)
+            } catch let error {
+                print("switchCurrentLogToPrevious: " + error.localizedDescription)
+            }
+            
+        }
+    }
+    
+    static var cachesDirectory: URL? {
+        let manager = FileManager.default
+        return manager.urls(for: .cachesDirectory, in: .userDomainMask).first
+    }
+    
+    static public func appendToCurrentLog(_ string: String) {
+        guard let currentLogPath = currentLogPath?.path,
+            let data = string.data(using: .utf8) else { return }
+        
+        logQueue.async {
+            
+            let manager = FileManager.default
+            
+            if !manager.fileExists(atPath: currentLogPath) {
+                manager.createFile(atPath: currentLogPath, contents: nil, attributes: nil)
+            }
+            
+            let file = FileHandle(forUpdatingAtPath: currentLogPath)
+            file?.seekToEndOfFile()
+            file?.write(data)
+            file?.closeFile()
+        }
     }
 }
 
