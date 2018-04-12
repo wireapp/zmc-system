@@ -41,6 +41,7 @@ extension ZMSLog {
         logQueue.sync {
             guard let token = recordingToken else { return }
             tokenToRemove = token
+            ZMSLog.clearLogs()
             recordingToken = nil
         }
         if let token = tokenToRemove {

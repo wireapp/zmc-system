@@ -25,7 +25,7 @@ class ZMLogTests: XCTestCase {
     override func setUp() {
         super.setUp()
         ZMSLog.debug_resetAllLevels();
-        ZMSLog.debug_clearLogs()
+        ZMSLog.clearLogs()
     }
     
     override func tearDown() {
@@ -413,6 +413,8 @@ extension ZMLogTests {
         sut.error("PANIC")
         sut.error("HELP")
         
+        Thread.sleep(forTimeInterval: 0.2)
+        
         // THEN
         guard let currentLog = ZMSLog.currentLog,
             let logContent = String(data: currentLog, encoding: .utf8) else {
@@ -427,6 +429,7 @@ extension ZMLogTests {
 
         XCTAssertEqual(lines.count, 2)
         XCTAssertTrue(lines.first!.hasSuffix("[0] [foo] PANIC"))
+        XCTAssertTrue(lines.last!.hasSuffix("[0] [foo] HELP"))
     }
     
     func testThatItDiscardsLogsWhenStopped() {
@@ -442,6 +445,7 @@ extension ZMLogTests {
         
         // THEN
         XCTAssertNil(ZMSLog.currentLog)
+        XCTAssertNil(ZMSLog.previousLog)
     }
 }
 
@@ -458,7 +462,8 @@ extension ZMLogTests {
         //when
         sut.warn("DON'T")
         sut.error("PANIC")
-        //ZMSLog.saveCurrentLogOnDisk()
+        
+        Thread.sleep(forTimeInterval: 0.2)
         
         //then
         XCTAssertNotNil(ZMSLog.currentLog)
@@ -468,20 +473,22 @@ extension ZMLogTests {
         
         //given
         let sut = ZMSLog(tag: "foo")
-        let currentLog = ZMSLog.currentLog
-        //let previousLog = ZMSLog.previousLog
-        
         ZMSLog.startRecording()
         
         //when
         sut.warn("DON'T")
         sut.error("PANIC")
         
+        Thread.sleep(forTimeInterval: 0.2)
+        
+        let currentLog = ZMSLog.currentLog
         ZMSLog.switchCurrentLogToPrevious()
         
+        Thread.sleep(forTimeInterval: 0.2)
         XCTAssertNotNil(ZMSLog.previousLog)
         XCTAssertEqual(ZMSLog.previousLog, currentLog)
         XCTAssertNil(ZMSLog.currentLog)
+        
     }
     
 }

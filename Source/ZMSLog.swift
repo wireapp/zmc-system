@@ -209,20 +209,20 @@ extension ZMSLog {
         return cachesDirectory?.appendingPathComponent("current.log")
     }
     
-    public static func debug_clearLogs() {
+    public static func clearLogs() {
         guard let previousLogPath = previousLogPath, let currentLogPath = currentLogPath else { return }
         logQueue.async {
             let manager = FileManager.default
             do {
                 try manager.removeItem(at: previousLogPath)
             } catch let error {
-                print("debug_clearLogs: " + error.localizedDescription)
+                print("clearLogs: " + error.localizedDescription)
             }
             
             do {
                 try manager.removeItem(at: currentLogPath)
             } catch let error {
-                print("debug_clearLogs: " + error.localizedDescription)
+                print("clearLogs: " + error.localizedDescription)
             }
         }
     }
@@ -250,6 +250,17 @@ extension ZMSLog {
     static var cachesDirectory: URL? {
         let manager = FileManager.default
         return manager.urls(for: .cachesDirectory, in: .userDomainMask).first
+    }
+    
+    static public var pathsForExistingLogs: [URL] {
+        var paths: [URL] =  []
+        if let currentPath = currentLogPath, currentLog != nil {
+            paths.append(currentPath)
+        }
+        if let previousPath = previousLogPath, previousLog != nil  {
+            paths.append(previousPath)
+        }
+        return paths
     }
     
     static public func appendToCurrentLog(_ string: String) {
