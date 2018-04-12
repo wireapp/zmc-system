@@ -201,11 +201,11 @@ extension ZMSLog {
         return handle?.readDataToEndOfFile()
     }
     
-    static var previousLogPath: URL? {
+    static public var previousLogPath: URL? {
         return cachesDirectory?.appendingPathComponent("previous.log")
     }
     
-    static var currentLogPath: URL? {
+    static public var currentLogPath: URL? {
         return cachesDirectory?.appendingPathComponent("current.log")
     }
     
