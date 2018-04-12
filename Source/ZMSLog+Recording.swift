@@ -27,11 +27,9 @@ extension ZMSLog {
     public static func startRecording(size: Int = 10000) {
         logQueue.sync {
             if recordingToken == nil {
-                //logCache = CircularArray<String>(size: size)
                 recordingToken = self.nonLockingAddHook(logHook: { (level, tag, message) -> (Void) in
                     let tagString = tag.flatMap { "[\($0)] "} ?? ""
                     ZMSLog.appendToCurrentLog("\(Date()): [\(level.rawValue)] \(tagString)\(message)\n")
-                    //logCache?.add("\(Date()): [\(level.rawValue)] \(tagString)\(message)")
                 })
             }
         }
@@ -43,8 +41,6 @@ extension ZMSLog {
         logQueue.sync {
             guard let token = recordingToken else { return }
             tokenToRemove = token
-            //logCache = nil
-            //ZMSLog.switchCurrentLogToPrevious()
             recordingToken = nil
         }
         if let token = tokenToRemove {
