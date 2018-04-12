@@ -213,17 +213,8 @@ extension ZMSLog {
         guard let previousLogPath = previousLogPath, let currentLogPath = currentLogPath else { return }
         logQueue.async {
             let manager = FileManager.default
-            do {
-                try manager.removeItem(at: previousLogPath)
-            } catch let error {
-                print("clearLogs: " + error.localizedDescription)
-            }
-            
-            do {
-                try manager.removeItem(at: currentLogPath)
-            } catch let error {
-                print("clearLogs: " + error.localizedDescription)
-            }
+            try? manager.removeItem(at: previousLogPath)
+            try? manager.removeItem(at: currentLogPath)
         }
     }
     
@@ -232,18 +223,8 @@ extension ZMSLog {
         
         logQueue.async {
             let manager = FileManager.default
-            do {
-                try manager.removeItem(at: previousLogPath)
-            } catch let error {
-                print("switchCurrentLogToPrevious: " + error.localizedDescription)
-            }
-            
-            do {
-                try manager.moveItem(at: currentLogPath, to: previousLogPath)
-            } catch let error {
-                print("switchCurrentLogToPrevious: " + error.localizedDescription)
-            }
-            
+            try? manager.removeItem(at: previousLogPath)
+            try? manager.moveItem(at: currentLogPath, to: previousLogPath)
         }
     }
     
