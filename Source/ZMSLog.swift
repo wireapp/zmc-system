@@ -267,9 +267,9 @@ extension ZMSLog {
             
             if updatingHandle == nil {
                 updatingHandle = FileHandle(forUpdatingAtPath: currentLogPath)
+                updatingHandle?.seekToEndOfFile()
             }
             
-            updatingHandle?.seekToEndOfFile()
             updatingHandle?.write(data)
             updatingHandle?.synchronizeFile()
         }
