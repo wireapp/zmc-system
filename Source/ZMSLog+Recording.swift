@@ -18,7 +18,6 @@
 
 import Foundation
 
-//private var logCache : CircularArray<String>? = nil
 private var recordingToken : ZMSLog.LogHookToken? = nil
 
 extension ZMSLog {

@@ -40,6 +40,9 @@ import Foundation
     /// Tag to use for this logging facility
     fileprivate let tag: String
     
+    /// FileHandle instance used for updating the log
+    fileprivate static var updatingHandle: FileHandle?
+    
     /// Log observers
     fileprivate static var logHooks : [UUID : LogHook] = [:]
     
@@ -212,6 +215,7 @@ extension ZMSLog {
     public static func clearLogs() {
         guard let previousLogPath = previousLogPath, let currentLogPath = currentLogPath else { return }
         logQueue.async {
+            closeHandle()
             let manager = FileManager.default
             try? manager.removeItem(at: previousLogPath)
             try? manager.removeItem(at: currentLogPath)
@@ -220,8 +224,8 @@ extension ZMSLog {
     
     public static func switchCurrentLogToPrevious() {
         guard let previousLogPath = previousLogPath, let currentLogPath = currentLogPath else { return }
-        
         logQueue.async {
+            closeHandle()
             let manager = FileManager.default
             try? manager.removeItem(at: previousLogPath)
             try? manager.moveItem(at: currentLogPath, to: previousLogPath)
@@ -244,6 +248,11 @@ extension ZMSLog {
         return paths
     }
     
+    static private func closeHandle() {
+        updatingHandle?.closeFile()
+        updatingHandle = nil
+    }
+    
     static public func appendToCurrentLog(_ string: String) {
         guard let currentLogPath = currentLogPath?.path,
             let data = string.data(using: .utf8) else { return }
@@ -256,10 +265,13 @@ extension ZMSLog {
                 manager.createFile(atPath: currentLogPath, contents: nil, attributes: nil)
             }
             
-            let file = FileHandle(forUpdatingAtPath: currentLogPath)
-            file?.seekToEndOfFile()
-            file?.write(data)
-            file?.closeFile()
+            if updatingHandle == nil {
+                updatingHandle = FileHandle(forUpdatingAtPath: currentLogPath)
+            }
+            
+            updatingHandle?.seekToEndOfFile()
+            updatingHandle?.write(data)
+            updatingHandle?.synchronizeFile()
         }
     }
 }
