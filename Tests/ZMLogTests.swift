@@ -476,6 +476,8 @@ extension ZMLogTests {
         ZMSLog.switchCurrentLogToPrevious()
         
         Thread.sleep(forTimeInterval: 0.2)
+        
+        //then
         XCTAssertNotNil(ZMSLog.previousLog)
         XCTAssertEqual(ZMSLog.previousLog, currentLog)
         XCTAssertNil(ZMSLog.currentLog)
@@ -492,6 +494,7 @@ extension ZMLogTests {
         let tag = "tag"
         let sut = ZMSLog(tag: tag)
         
+        //when
         ZMSLog.startRecording(isInternal: false)
         
         ZMSLog.set(level: .error, tag: tag)
@@ -510,6 +513,7 @@ extension ZMLogTests {
         
         let lines = getLinesFromCurrentLog()
         
+        //then
         XCTAssertEqual(lines.count, 3)
         XCTAssertFalse(lines.first!.hasSuffix("[0] [tag] ERROR"))
         XCTAssertTrue(lines[0].hasSuffix("[1] [tag] WARN"))
@@ -523,6 +527,7 @@ extension ZMLogTests {
         let tag = "tag"
         let sut = ZMSLog(tag: tag)
         
+        //when
         ZMSLog.startRecording(isInternal: true)
         
         ZMSLog.set(level: .error, tag: tag)
@@ -541,6 +546,7 @@ extension ZMLogTests {
         
         let lines = getLinesFromCurrentLog()
         
+        //then
         XCTAssertEqual(lines.count, 4)
         XCTAssertTrue(lines[0].hasSuffix("[0] [tag] ERROR"))
         XCTAssertTrue(lines[1].hasSuffix("[1] [tag] WARN"))
