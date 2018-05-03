@@ -27,7 +27,7 @@ extension ZMSLog {
         logQueue.sync {
             if recordingToken == nil {
                 recordingToken = self.nonLockingAddHook(logHook: { (level, tag, message) -> (Void) in
-                    guard isInternal || (!isInternal && level != .error) else { return }
+                    guard isInternal || level != .error else { return }
                     let tagString = tag.flatMap { "[\($0)] "} ?? ""
                     ZMSLog.appendToCurrentLog("\(Date()): [\(level.rawValue)] \(tagString)\(message)\n")
                 })
