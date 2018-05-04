@@ -63,6 +63,7 @@ jobs:
   test:
     <<: *defaults
     steps:
+    - checkout
     - attach_workspace:
         at: .
     - run: *setup_gems
