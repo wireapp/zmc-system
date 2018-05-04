@@ -28,6 +28,7 @@ buildfiles_cache: &buildfiles_cache
 setup_gems: &setup_gems
   name: "Setup gems"
   command: |
+    curl -O "${DEPENDENCIES_BASE_URL}/Gemfile"
     curl -O "${DEPENDENCIES_BASE_URL}/Gemfile.lock"
     curl -O "${DEPENDENCIES_BASE_URL}/.ruby-version"
 
