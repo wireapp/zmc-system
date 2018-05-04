@@ -22,11 +22,20 @@ buildfiles_cache: &buildfiles_cache
   key: v2-{{ .Revision }}
   paths: DerivedData
 
-# Download Gemfile.lock
-setup_environment: &setup_gems
+# -------------GEMS----------------
+
+# Download .ruby_version and Gemfile.lock
+setup_gems: &setup_gems
   name: "Setup gems"
   command: |
     curl -O "${DEPENDENCIES_BASE_URL}/Gemfile.lock"
+    curl -O "${DEPENDENCIES_BASE_URL}/.ruby-version"
+
+# Install gems
+install_gems: &install_gems
+  name: "Install gems"
+  command: |
+    bundle install --path ~/.gem
 
 version: 2
 jobs:
@@ -38,6 +47,7 @@ jobs:
     - run: *setup_gems
     - restore_cache: *gems_cache
     - restore_cache: *carthage_cache
+    - run: *install_gems
     - run: 
         name: "Build"
         command: bundle exec fastlane build
@@ -56,6 +66,7 @@ jobs:
         at: .
     - run: *setup_gems
     - restore_cache: *gems_cache
+    - run: *install_gems
     - run: 
         name: "Test"
         command: bundle exec fastlane test
