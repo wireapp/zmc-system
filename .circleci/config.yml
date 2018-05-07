@@ -57,7 +57,7 @@ jobs:
     - persist_to_workspace:
         root: .
         paths: 
-          - DerivedData
+          - DerivedData/Build/Products
           - build
 
   test:
