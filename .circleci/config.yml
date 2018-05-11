@@ -72,6 +72,9 @@ jobs:
     - run: 
         name: "Test"
         command: bundle exec fastlane test
+    - run: 
+        name: "Post test"
+        command: bundle exec fastlane post_test
     - store_artifacts:
         path: SnapshotResults
     - store_test_results:
