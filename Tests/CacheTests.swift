@@ -77,4 +77,23 @@ class CacheTests: XCTestCase {
         XCTAssertEqual(cache.value(for: "word 1"), nil)
         XCTAssertEqual(cache.value(for: "word 0"), nil)
     }
+
+    func testThatPurgeResetsContent() {
+        // GIVEN
+        let cache = Cache<String, String>(maxCost: 5, maxElementsCount: 5)
+        // WHEN
+        cache.set(value: "Hello 0", for: "word 0", cost: 5)
+        
+        // AND WHEN
+        cache.purge()
+        
+        // THEN
+        XCTAssertEqual(cache.value(for: "word 0"), nil)
+        
+        // AND WHEN
+        cache.set(value: "Goodbye 0", for: "word 0", cost: 5)
+        
+        // THEN
+        XCTAssertEqual(cache.value(for: "word 0"), "Goodbye 0")
+    }
 }
