@@ -58,6 +58,7 @@ public class Cache<Key: Hashable, Value> {
     public func purge() {
         cache.removeAll()
         cacheBuffer.clear()
+        currentCost = 0
     }
 
     private func purgeBasedOnElementsCount(adding key: Key) {
