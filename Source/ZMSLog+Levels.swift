@@ -60,14 +60,14 @@ private var logTagToLogger : [String : OSLog] = [:]
     }
 
     @available(iOS 10, *)
-    static func logger(tag: String?) -> OSLog? {
+    static func logger(tag: String?) -> OSLog {
         guard let tag = tag else { return OSLog.default }
         if logTagToLogger[tag] == nil {
             let bundleID = Bundle.main.bundleIdentifier ?? "com.wire.zmessaging.test"
             let logger = OSLog(subsystem: bundleID, category: tag)
             logTagToLogger[tag] = logger
         }
-        return logTagToLogger[tag]
+        return logTagToLogger[tag]!
     }
     
     /// Get all tags
