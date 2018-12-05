@@ -26,7 +26,7 @@ extension ZMSLog {
     @objc public static func startRecording(isInternal: Bool = true) {
         logQueue.sync {
             if recordingToken == nil {
-                recordingToken = self.nonLockingAddHook(logHook: { (level, tag, message) -> (Void) in
+                recordingToken = self.nonLockingAddMessageHook(logHook: { (level, tag, message) -> (Void) in
                     guard isInternal || level != .error else { return }
                     let tagString = tag.flatMap { "[\($0)] "} ?? ""
                     let date = dateFormatter.string(from: message.timestamp)
@@ -49,7 +49,7 @@ extension ZMSLog {
             self.removeLogHook(token: token)
         }
     }
-        
+
     private static var dateFormatter: DateFormatter {
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSS Z"

@@ -47,8 +47,9 @@ import os.log
         }
     }
 
-    public typealias LogHook = (_ level: ZMLogLevel_t, _ tag: String?, _ message: ZMSLog.Message) -> (Void)
-    
+    public typealias LogHook = (_ level: ZMLogLevel_t, _ tag: String?, _ message: String) -> (Void)
+    public typealias MessageLogHook = (_ level: ZMLogLevel_t, _ tag: String?, _ message: ZMSLog.Message) -> (Void)
+
     /// Tag to use for this logging facility
     fileprivate let tag: String
     
@@ -56,7 +57,7 @@ import os.log
     fileprivate static var updatingHandle: FileHandle?
     
     /// Log observers
-    fileprivate static var logHooks : [UUID : LogHook] = [:]
+    fileprivate static var logHooks : [UUID : MessageLogHook] = [:]
     
     @objc public init(tag: String) {
         self.tag = tag
@@ -146,23 +147,39 @@ extension ZMSLog {
             hook(level, tag, message)
         }
     }
-    
+
+    // MARK: - Normal Hooks
+
     /// Adds a log hook
+    @available(*, deprecated, renamed: "addMessageHook")
     @objc static public func addHook(logHook: @escaping LogHook) -> LogHookToken {
-        var token : LogHookToken! = nil
-        logQueue.sync {
-            token = self.nonLockingAddHook(logHook: logHook)
-        }
-        return token
+        return addMessageHook { logHook($0, $1, $2.text) }
     }
     
     /// Adds a log hook without locking
+    @available(*, deprecated, renamed: "nonLockingAddMessageHook")
     @objc static public func nonLockingAddHook(logHook: @escaping LogHook) -> LogHookToken {
+        return nonLockingAddMessageHook { logHook($0, $1, $2.text) }
+    }
+
+    // MARK: - Rich Hooks
+
+    /// Adds a log hook
+    @objc static public func addMessageHook(logHook: @escaping MessageLogHook) -> LogHookToken {
+        var token : LogHookToken! = nil
+        logQueue.sync {
+            token = self.nonLockingAddMessageHook(logHook: logHook)
+        }
+        return token
+    }
+
+    /// Adds a log hook without locking
+    @objc static public func nonLockingAddMessageHook(logHook: @escaping MessageLogHook) -> LogHookToken {
         let token = LogHookToken()
         self.logHooks[token.token] = logHook
         return token
     }
-    
+
     
     /// Remove a log hook
     @objc static public func removeLogHook(token: LogHookToken) {

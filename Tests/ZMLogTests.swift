@@ -204,7 +204,7 @@ extension ZMLogTests {
         let message = "PANIC!"
         
         let expectation = self.expectation(description: "Log received")
-        let token = ZMSLog.addHook { (_level, _tag, _message) in
+        let token = ZMSLog.addMessageHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
             XCTAssertEqual(_message.text, message)
@@ -228,7 +228,7 @@ extension ZMLogTests {
         let level = ZMLogLevel_t.info
         let message = "PANIC!"
         
-        let token = ZMSLog.addHook { (_level, _tag, _message) in
+        let token = ZMSLog.addMessageHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
             XCTAssertEqual(_message.text, message)
@@ -252,7 +252,7 @@ extension ZMLogTests {
         let message = "PANIC!"
         
         let expectation = self.expectation(description: "Log received")
-        let token = ZMSLog.addHook { (_level, _tag, _message) in
+        let token = ZMSLog.addMessageHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
             XCTAssertEqual(_message.text, message)
@@ -276,7 +276,7 @@ extension ZMLogTests {
         let level = ZMLogLevel_t.debug
         let message = "PANIC!"
         
-        let token = ZMSLog.addHook { (_level, _tag, _message) in
+        let token = ZMSLog.addMessageHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
             XCTAssertEqual(_message.text, message)
@@ -301,7 +301,7 @@ extension ZMLogTests {
         let message = "PANIC!"
         
         let expectation = self.expectation(description: "Log received")
-        let token = ZMSLog.addHook { (_level, _tag, _message) in
+        let token = ZMSLog.addMessageHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
             XCTAssertEqual(_message.text, message)
@@ -325,7 +325,7 @@ extension ZMLogTests {
         let tag = "Network"
         let message = "PANIC!"
 
-        let token = ZMSLog.addHook { (_level, _tag, _message) in
+        let token = ZMSLog.addMessageHook { (_level, _tag, _message) in
             XCTFail()
         }
         ZMSLog.removeLogHook(token: token)
@@ -342,7 +342,7 @@ extension ZMLogTests {
         let tag = "Network"
         let message = "PANIC!"
         
-        let _ = ZMSLog.addHook { (_level, _tag, _message) in
+        let _ = ZMSLog.addMessageHook { (_level, _tag, _message) in
             XCTFail()
         }
         ZMSLog.removeAllLogHooks()
@@ -362,13 +362,13 @@ extension ZMLogTests {
         let expectation1 = self.expectation(description: "Log received")
         let expectation2 = self.expectation(description: "Log received")
 
-        let token1 = ZMSLog.addHook { (_level, _tag, _message) in
+        let token1 = ZMSLog.addMessageHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
             XCTAssertEqual(_message.text, message)
             expectation1.fulfill()
         }
-        let token2 = ZMSLog.addHook { (_level, _tag, _message) in
+        let token2 = ZMSLog.addMessageHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
             XCTAssertEqual(_message.text, message)
@@ -384,6 +384,30 @@ extension ZMLogTests {
         // AFTER
         ZMSLog.removeLogHook(token: token1)
         ZMSLog.removeLogHook(token: token2)
+    }
+
+    func testThatLogHookIsCalledWithDeprecatedAPI() {
+        // GIVEN
+        let tag = "Network"
+        let level = ZMLogLevel_t.warn
+        let message = "PANIC!"
+
+        let expectation = self.expectation(description: "Log received")
+        let token = ZMSLog.addHook { (_level, _tag, _message) in
+            XCTAssertEqual(level, _level)
+            XCTAssertEqual(tag, _tag)
+            XCTAssertEqual(_message, message)
+            expectation.fulfill()
+        }
+
+        // WHEN
+        ZMSLog(tag: tag).warn(message)
+
+        // THEN
+        self.waitForExpectations(timeout: 0.5)
+
+        // AFTER
+        ZMSLog.removeLogHook(token: token)
     }
 }
 
