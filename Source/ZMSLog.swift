@@ -35,8 +35,19 @@ import os.log
 ///     zmLog.warn("A serious warning!")
 ///
 @objc public class ZMSLog : NSObject {
-   
-    public typealias LogHook = (_ level: ZMLogLevel_t, _ tag: String?, _ message: String) -> (Void)
+
+    /// Represents a message to be logged.
+    @objc(ZMSLogMessage) public class Message: NSObject {
+        public let text: String
+        public let timestamp: Date
+
+        internal init(text: String, timestamp: Date) {
+            self.text = text
+            self.timestamp = timestamp
+        }
+    }
+
+    public typealias LogHook = (_ level: ZMLogLevel_t, _ tag: String?, _ message: ZMSLog.Message) -> (Void)
     
     /// Tag to use for this logging facility
     fileprivate let tag: String
@@ -111,7 +122,7 @@ extension ZMSLog {
 
 // MARK: - Hooks (log observing)
 extension ZMSLog {
-    
+
     // NOTE:         
     // I could use NotificationCenter for this, but I would have to deal with
     // passing and extracting (and downcasting and wrapping) the parameters from the user info dictionary
@@ -130,7 +141,7 @@ extension ZMSLog {
     }
     
     /// Notify all hooks of a new log
-    fileprivate static func notifyHooks(level: ZMLogLevel_t, tag: String?, message: String) {
+    fileprivate static func notifyHooks(level: ZMLogLevel_t, tag: String?, message: ZMSLog.Message) {
         self.logHooks.forEach { (_, hook) in
             hook(level, tag, message)
         }
@@ -189,7 +200,7 @@ extension ZMSLog {
     
     /// Log only if this log level is enabled for the tag, or no tag is set
     @objc static public func logWithLevel(_ level: ZMLogLevel_t, message:  @autoclosure () -> String, tag: String?, file: String = #file, line: UInt = #line) {
-        let concreteMessage = message()
+        let concreteMessage = Message(text: message(), timestamp: Date())
         logQueue.async {
             if let tag = tag {
                 self.register(tag: tag)

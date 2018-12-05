@@ -207,7 +207,7 @@ extension ZMLogTests {
         let token = ZMSLog.addHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
-            XCTAssertEqual(message, _message)
+            XCTAssertEqual(_message.text, message)
             expectation.fulfill()
         }
         
@@ -231,7 +231,7 @@ extension ZMLogTests {
         let token = ZMSLog.addHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
-            XCTAssertEqual(message, _message)
+            XCTAssertEqual(_message.text, message)
         }
         
         // WHEN
@@ -255,7 +255,7 @@ extension ZMLogTests {
         let token = ZMSLog.addHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
-            XCTAssertEqual(message, _message)
+            XCTAssertEqual(_message.text, message)
             expectation.fulfill()
         }
         
@@ -279,7 +279,7 @@ extension ZMLogTests {
         let token = ZMSLog.addHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
-            XCTAssertEqual(message, _message)
+            XCTAssertEqual(_message.text, message)
             XCTFail()
         }
         
@@ -304,7 +304,7 @@ extension ZMLogTests {
         let token = ZMSLog.addHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
-            XCTAssertEqual(message, _message)
+            XCTAssertEqual(_message.text, message)
             expectation.fulfill()
         }
         
@@ -365,13 +365,13 @@ extension ZMLogTests {
         let token1 = ZMSLog.addHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
-            XCTAssertEqual(message, _message)
+            XCTAssertEqual(_message.text, message)
             expectation1.fulfill()
         }
         let token2 = ZMSLog.addHook { (_level, _tag, _message) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
-            XCTAssertEqual(message, _message)
+            XCTAssertEqual(_message.text, message)
             expectation2.fulfill()
         }
         

@@ -29,7 +29,8 @@ extension ZMSLog {
                 recordingToken = self.nonLockingAddHook(logHook: { (level, tag, message) -> (Void) in
                     guard isInternal || level != .error else { return }
                     let tagString = tag.flatMap { "[\($0)] "} ?? ""
-                    ZMSLog.appendToCurrentLog("\(currentDate): [\(level.rawValue)] \(tagString)\(message)\n")
+                    let date = dateFormatter.string(from: message.timestamp)
+                    ZMSLog.appendToCurrentLog("\(date): [\(level.rawValue)] \(tagString)\(message.text)\n")
                 })
             }
         }
@@ -48,11 +49,7 @@ extension ZMSLog {
             self.removeLogHook(token: token)
         }
     }
-    
-    private static var currentDate: String {
-        return dateFormatter.string(from: Date())
-    }
-    
+        
     private static var dateFormatter: DateFormatter {
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSS Z"
