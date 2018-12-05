@@ -142,9 +142,9 @@ extension ZMSLog {
     }
     
     /// Notify all hooks of a new log
-    fileprivate static func notifyHooks(level: ZMLogLevel_t, tag: String?, message: ZMSLogEntry) {
+    fileprivate static func notifyHooks(level: ZMLogLevel_t, tag: String?, entry: ZMSLogEntry) {
         self.logHooks.forEach { (_, hook) in
-            hook(level, tag, message)
+            hook(level, tag, entry)
         }
     }
 
@@ -224,8 +224,8 @@ extension ZMSLog {
             }
         
             if tag == nil || level.rawValue <= ZMSLog.getLevelNoLock(tag: tag!).rawValue {
-                os_log("%{public}@", log: self.logger(tag: tag), type: level.logLevel, logEntry)
-                self.notifyHooks(level: level, tag: tag, message: logEntry)
+                os_log("%{public}@", log: self.logger(tag: tag), type: level.logLevel, logEntry.text)
+                self.notifyHooks(level: level, tag: tag, entry: logEntry)
             }
         }
     }
