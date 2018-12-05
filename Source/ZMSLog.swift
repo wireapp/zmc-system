@@ -20,6 +20,17 @@
 import Foundation
 import os.log
 
+/// Represents an entry to be logged.
+@objc public class ZMSLogEntry: NSObject {
+    public let text: String
+    public let timestamp: Date
+
+    internal init(text: String, timestamp: Date) {
+        self.text = text
+        self.timestamp = timestamp
+    }
+}
+
 /// A logging facility based on tags to switch on and off certain logs
 ///
 /// - Note:
@@ -36,19 +47,8 @@ import os.log
 ///
 @objc public class ZMSLog : NSObject {
 
-    /// Represents a message to be logged.
-    @objc(ZMSLogMessage) public class Message: NSObject {
-        public let text: String
-        public let timestamp: Date
-
-        internal init(text: String, timestamp: Date) {
-            self.text = text
-            self.timestamp = timestamp
-        }
-    }
-
     public typealias LogHook = (_ level: ZMLogLevel_t, _ tag: String?, _ message: String) -> (Void)
-    public typealias MessageLogHook = (_ level: ZMLogLevel_t, _ tag: String?, _ message: ZMSLog.Message) -> (Void)
+    public typealias LogEntryHook = (_ level: ZMLogLevel_t, _ tag: String?, _ message: ZMSLogEntry) -> (Void)
 
     /// Tag to use for this logging facility
     fileprivate let tag: String
@@ -57,7 +57,7 @@ import os.log
     fileprivate static var updatingHandle: FileHandle?
     
     /// Log observers
-    fileprivate static var logHooks : [UUID : MessageLogHook] = [:]
+    fileprivate static var logHooks : [UUID : LogEntryHook] = [:]
     
     @objc public init(tag: String) {
         self.tag = tag
@@ -142,7 +142,7 @@ extension ZMSLog {
     }
     
     /// Notify all hooks of a new log
-    fileprivate static func notifyHooks(level: ZMLogLevel_t, tag: String?, message: ZMSLog.Message) {
+    fileprivate static func notifyHooks(level: ZMLogLevel_t, tag: String?, message: ZMSLogEntry) {
         self.logHooks.forEach { (_, hook) in
             hook(level, tag, message)
         }
@@ -151,30 +151,30 @@ extension ZMSLog {
     // MARK: - Normal Hooks
 
     /// Adds a log hook
-    @available(*, deprecated, renamed: "addMessageHook")
+    @available(*, deprecated, renamed: "addEntryHook")
     @objc static public func addHook(logHook: @escaping LogHook) -> LogHookToken {
-        return addMessageHook { logHook($0, $1, $2.text) }
+        return addEntryHook { logHook($0, $1, $2.text) }
     }
     
     /// Adds a log hook without locking
-    @available(*, deprecated, renamed: "nonLockingAddMessageHook")
+    @available(*, deprecated, renamed: "nonLockingAddEntryHook")
     @objc static public func nonLockingAddHook(logHook: @escaping LogHook) -> LogHookToken {
-        return nonLockingAddMessageHook { logHook($0, $1, $2.text) }
+        return nonLockingAddEntryHook { logHook($0, $1, $2.text) }
     }
 
     // MARK: - Rich Hooks
 
     /// Adds a log hook
-    @objc static public func addMessageHook(logHook: @escaping MessageLogHook) -> LogHookToken {
+    @objc static public func addEntryHook(logHook: @escaping LogEntryHook) -> LogHookToken {
         var token : LogHookToken! = nil
         logQueue.sync {
-            token = self.nonLockingAddMessageHook(logHook: logHook)
+            token = self.nonLockingAddEntryHook(logHook: logHook)
         }
         return token
     }
 
     /// Adds a log hook without locking
-    @objc static public func nonLockingAddMessageHook(logHook: @escaping MessageLogHook) -> LogHookToken {
+    @objc static public func nonLockingAddEntryHook(logHook: @escaping LogEntryHook) -> LogHookToken {
         let token = LogHookToken()
         self.logHooks[token.token] = logHook
         return token
@@ -217,15 +217,15 @@ extension ZMSLog {
     
     /// Log only if this log level is enabled for the tag, or no tag is set
     @objc static public func logWithLevel(_ level: ZMLogLevel_t, message:  @autoclosure () -> String, tag: String?, file: String = #file, line: UInt = #line) {
-        let concreteMessage = Message(text: message(), timestamp: Date())
+        let logEntry = ZMSLogEntry(text: message(), timestamp: Date())
         logQueue.async {
             if let tag = tag {
                 self.register(tag: tag)
             }
         
             if tag == nil || level.rawValue <= ZMSLog.getLevelNoLock(tag: tag!).rawValue {
-                os_log("%{public}@", log: self.logger(tag: tag), type: level.logLevel, concreteMessage)
-                self.notifyHooks(level: level, tag: tag, message: concreteMessage)
+                os_log("%{public}@", log: self.logger(tag: tag), type: level.logLevel, logEntry)
+                self.notifyHooks(level: level, tag: tag, message: logEntry)
             }
         }
     }

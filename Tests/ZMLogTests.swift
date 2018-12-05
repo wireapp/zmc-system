@@ -204,10 +204,10 @@ extension ZMLogTests {
         let message = "PANIC!"
         
         let expectation = self.expectation(description: "Log received")
-        let token = ZMSLog.addMessageHook { (_level, _tag, _message) in
+        let token = ZMSLog.addEntryHook { (_level, _tag, entry) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
-            XCTAssertEqual(_message.text, message)
+            XCTAssertEqual(entry.text, message)
             expectation.fulfill()
         }
         
@@ -228,10 +228,10 @@ extension ZMLogTests {
         let level = ZMLogLevel_t.info
         let message = "PANIC!"
         
-        let token = ZMSLog.addMessageHook { (_level, _tag, _message) in
+        let token = ZMSLog.addEntryHook { (_level, _tag, entry) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
-            XCTAssertEqual(_message.text, message)
+            XCTAssertEqual(entry.text, message)
         }
         
         // WHEN
@@ -252,10 +252,10 @@ extension ZMLogTests {
         let message = "PANIC!"
         
         let expectation = self.expectation(description: "Log received")
-        let token = ZMSLog.addMessageHook { (_level, _tag, _message) in
+        let token = ZMSLog.addEntryHook { (_level, _tag, entry) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
-            XCTAssertEqual(_message.text, message)
+            XCTAssertEqual(entry.text, message)
             expectation.fulfill()
         }
         
@@ -276,10 +276,10 @@ extension ZMLogTests {
         let level = ZMLogLevel_t.debug
         let message = "PANIC!"
         
-        let token = ZMSLog.addMessageHook { (_level, _tag, _message) in
+        let token = ZMSLog.addEntryHook { (_level, _tag, entry) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
-            XCTAssertEqual(_message.text, message)
+            XCTAssertEqual(entry.text, message)
             XCTFail()
         }
         
@@ -301,10 +301,10 @@ extension ZMLogTests {
         let message = "PANIC!"
         
         let expectation = self.expectation(description: "Log received")
-        let token = ZMSLog.addMessageHook { (_level, _tag, _message) in
+        let token = ZMSLog.addEntryHook { (_level, _tag, entry) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
-            XCTAssertEqual(_message.text, message)
+            XCTAssertEqual(entry.text, message)
             expectation.fulfill()
         }
         
@@ -325,7 +325,7 @@ extension ZMLogTests {
         let tag = "Network"
         let message = "PANIC!"
 
-        let token = ZMSLog.addMessageHook { (_level, _tag, _message) in
+        let token = ZMSLog.addEntryHook { (_level, _tag, entry) in
             XCTFail()
         }
         ZMSLog.removeLogHook(token: token)
@@ -342,7 +342,7 @@ extension ZMLogTests {
         let tag = "Network"
         let message = "PANIC!"
         
-        let _ = ZMSLog.addMessageHook { (_level, _tag, _message) in
+        let _ = ZMSLog.addEntryHook { (_level, _tag, entry) in
             XCTFail()
         }
         ZMSLog.removeAllLogHooks()
@@ -362,16 +362,16 @@ extension ZMLogTests {
         let expectation1 = self.expectation(description: "Log received")
         let expectation2 = self.expectation(description: "Log received")
 
-        let token1 = ZMSLog.addMessageHook { (_level, _tag, _message) in
+        let token1 = ZMSLog.addEntryHook { (_level, _tag, entry) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
-            XCTAssertEqual(_message.text, message)
+            XCTAssertEqual(entry.text, message)
             expectation1.fulfill()
         }
-        let token2 = ZMSLog.addMessageHook { (_level, _tag, _message) in
+        let token2 = ZMSLog.addEntryHook { (_level, _tag, entry) in
             XCTAssertEqual(level, _level)
             XCTAssertEqual(tag, _tag)
-            XCTAssertEqual(_message.text, message)
+            XCTAssertEqual(entry.text, message)
             expectation2.fulfill()
         }
         
