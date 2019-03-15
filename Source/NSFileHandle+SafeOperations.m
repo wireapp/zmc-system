@@ -24,6 +24,7 @@
 {
     @try {
         [self writeData:data];
+        return YES;
     } @catch(NSException *exception) {
         *error = [NSError errorWithDomain:exception.name code:0 userInfo:exception.userInfo];
         return NO;
@@ -34,6 +35,7 @@
 {
     @try {
         [self synchronizeFile];
+        return YES;
     } @catch(NSException *exception) {
         *error = [NSError errorWithDomain:exception.name code:0 userInfo:exception.userInfo];
         return NO;
