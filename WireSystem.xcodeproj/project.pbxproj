@@ -557,7 +557,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.wire.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Tests/Test-Bridging.h";
-				SWIFT_VERSION = "$(SWIFT_VERSION)";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
