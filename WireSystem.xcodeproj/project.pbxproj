@@ -322,10 +322,10 @@
 			};
 			buildConfigurationList = 3ECC34C71AD430BB0089FD4B /* Build configuration list for PBXProject "WireSystem" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
+				en,
 			);
 			mainGroup = 3ECC34C31AD430BB0089FD4B;
 			productRefGroup = 3ECC34E61AD433520089FD4B /* Products */;
