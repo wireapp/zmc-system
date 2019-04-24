@@ -429,11 +429,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 546BC7D11EFD49B400DDB12A /* project-debug.xcconfig */;
 			buildSettings = {
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 			};
 			name = Debug;
 		};
@@ -441,11 +436,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 546BC7D21EFD49B400DDB12A /* project.xcconfig */;
 			buildSettings = {
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 			};
 			name = Release;
 		};
@@ -453,8 +443,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 092758691B70E68F00AD5A78 /* WireSystem.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/WireSystem-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wire.WireSystem;
 			};
@@ -464,8 +452,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 092758691B70E68F00AD5A78 /* WireSystem.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/WireSystem-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wire.WireSystem;
 			};
