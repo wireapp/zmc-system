@@ -424,6 +424,31 @@ extension ZMLogTests {
         XCTAssertTrue(lines.last!.hasSuffix("[0] [foo] HELP"))
     }
     
+    func testThatItRecordsPublicLogs() {
+        struct Item: PrivateStringConvertible {
+            var name: String
+            var privateDescription: String {
+                return "hidden"
+            }
+        }
+        
+        // GIVEN
+        let sut = ZMSLog(tag: "foo")
+        let item = Item(name: "Secret")
+        ZMSLog.startRecording()
+        
+        // WHEN
+        sut.publicLog("Item: \(item)")
+        
+        Thread.sleep(forTimeInterval: 0.2)
+        
+        // THEN
+        let lines = getLinesFromCurrentLog()
+        
+        XCTAssertEqual(lines.count, 1)
+        XCTAssertTrue(lines.first!.hasSuffix("[0] [foo] Item: hidden"))
+    }
+    
     func testThatItDiscardsLogsWhenStopped() {
         
         // GIVEN

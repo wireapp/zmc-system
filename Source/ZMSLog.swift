@@ -90,6 +90,10 @@ extension ZMSLog {
     public func debug(_ message: @autoclosure () -> String, file: String = #file, line: UInt = #line) {
         ZMSLog.logWithLevel(.debug, message: message(), tag: self.tag, file: file, line:line)
     }
+ 
+    public func publicLog(_ message: @autoclosure () -> SanitizedString, file: String = #file, line: UInt = #line) {
+        ZMSLog.logWithLevel(.error, message: "\(message())", tag: self.tag, file: file, line:line)
+    }
 }
 
 // MARK: - Conditional execution
