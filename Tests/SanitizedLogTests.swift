@@ -27,10 +27,10 @@ struct Item {
     var age: Int
 }
 
-extension Item: PrivateStringConvertible {
+extension Item: SafeForLoggingStringConvertible {
     static var redacted = "<redacted>"
     
-    var privateDescription: String {
+    var safeForLoggingDescription: String {
         return Item.redacted
     }
 }

@@ -425,9 +425,9 @@ extension ZMLogTests {
     }
     
     func testThatItRecordsPublicLogs() {
-        struct Item: PrivateStringConvertible {
+        struct Item: SafeForLoggingStringConvertible {
             var name: String
-            var privateDescription: String {
+            var safeForLoggingDescription: String {
                 return "hidden"
             }
         }
