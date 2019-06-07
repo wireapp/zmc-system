@@ -18,11 +18,11 @@
 
 import Foundation
 
-/// Object can implement `PrivateStringConvertible` to allow creating the privacy-enabled object description.
+/// Object can implement this protocol to allow creating the privacy-enabled object description.
 /// Things to consider when implementing is to exclude any kind of personal information from the object description:
 /// No user name, login, email, etc., or any kind of backend object ID.
-public protocol PrivateStringConvertible {
-    var privateDescription: String { get }
+public protocol SafeForLoggingStringConvertible {
+    var safeForLoggingDescription: String { get }
 }
 
 public struct SanitizedString: Equatable {
@@ -51,8 +51,8 @@ extension SanitizedString: StringInterpolationProtocol {
         value += literal
     }
     
-    public mutating func appendInterpolation<T: PrivateStringConvertible>(_ x: T) {
-        value += x.privateDescription
+    public mutating func appendInterpolation<T: SafeForLoggingStringConvertible>(_ x: T) {
+        value += x.safeForLoggingDescription
     }
 }
 
