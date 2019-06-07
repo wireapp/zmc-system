@@ -58,7 +58,7 @@ class SanitizedLogTests: XCTestCase {
     
     func testInterpolationWithLiterals() {
         let interpolated: SanitizedString = "some \(item) item"
-        let result = SanitizedString(value: "some \(Item.redacted) item")
+        let result = SanitizedString(stringLiteral: "some \(Item.redacted) item")
         XCTAssertEqual(result, interpolated)
     }    
 }
