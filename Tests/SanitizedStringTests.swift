@@ -36,7 +36,7 @@ extension Item: SafeForLoggingStringConvertible {
 }
 
 
-class SanitizedLogTests: XCTestCase {
+class SanitizedStringTests: XCTestCase {
     
     var item: Item!
     
@@ -60,5 +60,46 @@ class SanitizedLogTests: XCTestCase {
         let interpolated: SanitizedString = "some \(item) item"
         let result = SanitizedString(stringLiteral: "some \(Item.redacted) item")
         XCTAssertEqual(result, interpolated)
-    }    
+    }
+}
+
+extension SanitizedStringTests {
+    func testString() {
+        let sut = "some"
+        let result: SanitizedString = "\(sut)"
+        XCTAssertEqual(sut, result.value)
+    }
+    
+    func testInt() {
+        let sut = 12
+        let result: SanitizedString = "\(sut)"
+        XCTAssertEqual(String(sut), result.value)
+    }
+    
+    func testFloat() {
+        let sut: Float = 12.1
+        let result: SanitizedString = "\(sut)"
+        XCTAssertEqual(String(sut), result.value)
+    }
+    
+    func testDouble() {
+        let sut: Double = 12.1
+        let result: SanitizedString = "\(sut)"
+        XCTAssertEqual(String(sut), result.value)
+    }
+    
+    func testArray() {
+        let sut = [1, 2, 3]
+        let result: SanitizedString = "\(sut)"
+        XCTAssertEqual(String(describing: sut), result.value)
+    }
+    
+    func testDictionary() {
+        let sut = ["some" : 2]
+        let result: SanitizedString = "\(sut)"
+        
+        // All keys and values in the dictionary will be converted to strings, so 1 will become "1"
+        let converted = sut.mapValues { String($0) }
+        XCTAssertEqual(String(describing: converted), result.value)
+    }
 }
