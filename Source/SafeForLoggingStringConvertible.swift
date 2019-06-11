@@ -25,24 +25,18 @@ public protocol SafeForLoggingStringConvertible {
     var safeForLoggingDescription: String { get }
 }
 
-extension String: SafeForLoggingStringConvertible { public var safeForLoggingDescription: String { return self } }
-extension Int: SafeForLoggingStringConvertible { public var safeForLoggingDescription: String { return String(describing: self) } }
-extension Float: SafeForLoggingStringConvertible { public var safeForLoggingDescription: String { return String(describing: self) } }
-extension Double: SafeForLoggingStringConvertible { public var safeForLoggingDescription: String { return String(describing: self) } }
+public struct SafeValueForLogging<T: CustomStringConvertible>: SafeForLoggingStringConvertible {
+    public let value: T
+    public init(_ value: T) {
+        self.value = value
+    }
+    public var safeForLoggingDescription: String {
+        return value.description
+    }
+}
 
 extension Array: SafeForLoggingStringConvertible where Array.Element: SafeForLoggingStringConvertible {
     public var safeForLoggingDescription: String {
-        // This will print array of Ints as [1, 2, 3] instead of converting them to strings like this ["1", "2", "3"]
-        if let ints = self as? [Int] {
-            return String(describing: ints)
-        }
-        if let floats = self as? [Int] {
-            return String(describing: floats)
-        }
-        if let doubles = self as? [Int] {
-            return String(describing: doubles)
-        }
-        
         return String(describing: map { $0.safeForLoggingDescription} )
     }
 }
