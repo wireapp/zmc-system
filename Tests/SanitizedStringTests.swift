@@ -106,4 +106,18 @@ extension SanitizedStringTests {
         
         XCTAssertEqual(String(describing: sut), result.value)
     }
+    
+    func testOptional_nil() {
+        let value: SafeValueForLogging<String>? = nil
+        let result: SanitizedString = "\(value)"
+        XCTAssertEqual("nil", result.value)
+    }
+    
+    func testOptional_notNil() {
+        let sut = "something"
+        let value: SafeValueForLogging<String>? = SafeValueForLogging(sut)
+        let result: SanitizedString = "\(value)"
+        
+        XCTAssertEqual(String(describing: sut), result.value)
+    }
 }
