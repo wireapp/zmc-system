@@ -27,7 +27,7 @@ extension ZMSLog {
         logQueue.sync {
             if recordingToken == nil {
                 recordingToken = self.nonLockingAddEntryHook(logHook: { (level, tag, entry) -> (Void) in
-                    guard isInternal || level == .public else { return }
+                    guard (isInternal || level == .public) && !ProcessInfo.processInfo.isRunningTests else { return }
                     let tagString = tag.flatMap { "[\($0)] "} ?? ""
                     let date = dateFormatter.string(from: entry.timestamp)
                     // Add newline if it does not have it yet
@@ -58,4 +58,10 @@ extension ZMSLog {
         return df
     }
     
+}
+
+extension ProcessInfo {
+    var isRunningTests : Bool {
+        return environment["XCTestConfigurationFilePath"] != nil
+    }
 }
