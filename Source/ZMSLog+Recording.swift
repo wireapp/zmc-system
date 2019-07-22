@@ -67,11 +67,3 @@ extension ZMSLog {
     }
     
 }
-
-extension String {
-    private static var dateFormatter: DateFormatter {
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSS Z"
-        return df
-    }
-}
