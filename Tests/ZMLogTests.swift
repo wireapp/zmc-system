@@ -457,13 +457,9 @@ extension ZMLogTests {
         // WHEN
         sut.safePublic("Item: \(item)")
         
-        Thread.sleep(forTimeInterval: 0.2)
-        
         // THEN
-        let lines = getLinesFromCurrentLog()
-        
-        XCTAssertEqual(lines.count, 0)
-        Thread.sleep(forTimeInterval: 0.2)
+        let currentLog = ZMSLog.currentLog
+        XCTAssertNil(currentLog)
     }
     
     func testThatItRecordsPublicLogsWhenLevelIsEnabled() {
@@ -627,11 +623,11 @@ extension ZMLogTests {
     }
     
     
-    func getLinesFromCurrentLog() -> [String] {
+    func getLinesFromCurrentLog(file: StaticString = #file, line: UInt = #line) -> [String] {
         
         guard let currentLog = ZMSLog.currentLog,
             let logContent = String(data: currentLog, encoding: .utf8) else {
-                XCTFail()
+                XCTFail(file: file, line: line)
                 return []
         }
         
