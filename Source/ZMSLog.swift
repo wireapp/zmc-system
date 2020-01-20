@@ -143,7 +143,8 @@ extension ZMSLog {
     // I prefer handling my own delegates
     
     /// Opaque token to unregister observers
-    @objc public class LogHookToken : NSObject {
+    @objc
+    public class LogHookToken : NSObject {
 
         /// Internal identifier
         fileprivate let token : UUID
