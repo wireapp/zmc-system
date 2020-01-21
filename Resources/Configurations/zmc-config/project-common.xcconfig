@@ -22,6 +22,7 @@
 // Architectures
 //
 
+SDKROOT = iphoneos
 ARCHS[sdk=iphoneos*] = arm64 armv7
 ARCHS[sdk=iphonesimulator*] = x86_64
 VALID_ARCHS[sdk=iphoneos*] = arm64 armv7
