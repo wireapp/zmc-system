@@ -145,7 +145,7 @@ extension ZMSLog {
     // I prefer handling my own delegates
     
     /// Opaque token to unregister observers
-    @objc(LogHookToken)
+    @objc(ZMSLogLogHookToken)
     public class LogHookToken : NSObject {
 
         /// Internal identifier
