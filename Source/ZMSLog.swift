@@ -46,7 +46,8 @@ public class ZMSLogEntry: NSObject {
 ///     zmLog.debug("Debug information")
 ///     zmLog.warn("A serious warning!")
 ///
-@objc public class ZMSLog : NSObject {
+@objc
+public class ZMSLog : NSObject {
 
     public typealias LogHook = (_ level: ZMLogLevel_t, _ tag: String?, _ message: String) -> (Void)
     public typealias LogEntryHook = (
@@ -72,7 +73,8 @@ public class ZMSLogEntry: NSObject {
     }
     
     /// Wait for all log operations to be completed
-    @objc public static func sync() {
+    @objc
+    public static func sync() {
         logQueue.sync {
             // no op
         }
@@ -143,7 +145,7 @@ extension ZMSLog {
     // I prefer handling my own delegates
     
     /// Opaque token to unregister observers
-    @objc
+    @objc(LogHookToken)
     public class LogHookToken : NSObject {
 
         /// Internal identifier
