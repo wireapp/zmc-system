@@ -136,26 +136,26 @@ extension ZMSLog {
     }
 }
 
+// NOTE:
+// I could use NotificationCenter for this, but I would have to deal with
+// passing and extracting (and downcasting and wrapping) the parameters from the user info dictionary
+// I prefer handling my own delegates
+
+/// Opaque token to unregister observers
+@objc(ZMSLogLogHookToken)
+public final class LogHookToken : NSObject {
+
+    /// Internal identifier
+    fileprivate let token : UUID
+    
+    override init() {
+        self.token = UUID()
+        super.init()
+    }
+}
+
 // MARK: - Hooks (log observing)
 extension ZMSLog {
-
-    // NOTE:         
-    // I could use NotificationCenter for this, but I would have to deal with
-    // passing and extracting (and downcasting and wrapping) the parameters from the user info dictionary
-    // I prefer handling my own delegates
-    
-    /// Opaque token to unregister observers
-    @objc(ZMSLogLogHookToken)
-    public class LogHookToken : NSObject {
-
-        /// Internal identifier
-        fileprivate let token : UUID
-        
-        override init() {
-            self.token = UUID()
-            super.init()
-        }
-    }
     
     /// Notify all hooks of a new log
     fileprivate static func notifyHooks(level: ZMLogLevel_t,
