@@ -34,6 +34,12 @@ extension SanitizedString: ExpressibleByStringInterpolation {
     }
 }
 
+extension SanitizedString: SafeForLoggingStringConvertible {
+    public var safeForLoggingDescription: String {
+        return self.value
+    }
+}
+
 extension SanitizedString: StringInterpolationProtocol {
     
     public init(literalCapacity: Int, interpolationCount: Int) {
