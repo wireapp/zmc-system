@@ -18,7 +18,7 @@
 
 import Foundation
 
-/// In memory cache with support for  generics.
+/// In memory cache with support for generics.
 
 public class Cache<Key: Hashable, Value> {
     private var cache: [Key: EntryMetadata<Value>] = [:]
@@ -75,7 +75,7 @@ public class Cache<Key: Hashable, Value> {
         return didPurgeItems
     }
     
-    /// Retrieve a value from the Cache
+    /// Retrieve a value from the cache
     ///
     /// - Parameters:
     ///     - key: Key used to retrieve a previously stored value.
