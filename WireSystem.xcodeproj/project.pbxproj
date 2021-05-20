@@ -453,6 +453,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 092758691B70E68F00AD5A78 /* WireSystem.xcconfig */;
 			buildSettings = {
+				"ARCHS[sdk=iphonesimulator*]" = "$(ARCHS_STANDARD)";
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/WireSystem-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wire.WireSystem;
 			};
@@ -462,6 +463,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 092758691B70E68F00AD5A78 /* WireSystem.xcconfig */;
 			buildSettings = {
+				"ARCHS[sdk=iphonesimulator*]" = "$(ARCHS_STANDARD)";
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/WireSystem-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wire.WireSystem;
 			};
@@ -471,6 +473,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 546BC7D51EFD49B400DDB12A /* test-target.xcconfig */;
 			buildSettings = {
+				"ARCHS[sdk=iphonesimulator*]" = "$(ARCHS_STANDARD)";
 				INFOPLIST_FILE = Tests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.wire.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -482,6 +485,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 546BC7D51EFD49B400DDB12A /* test-target.xcconfig */;
 			buildSettings = {
+				"ARCHS[sdk=iphonesimulator*]" = "$(ARCHS_STANDARD)";
 				INFOPLIST_FILE = Tests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.wire.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
